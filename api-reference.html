@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference — Betavend API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand"><div class="brand-icon">B</div>Betavend<span class="brand-tag">DOCS</span></a>
+  <div class="nav-links">
+    <a href="authentication.html">Auth</a>
+    <a href="api-reference.html" class="active">API Reference</a>
+    <a href="errors.html">Errors</a>
+    <a href="webhooks.html">Webhooks</a>
+    <!-- <a href="pricing.html">Pricing</a> -->
+    <a href="changelog.html">Changelog</a>
+  </div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Getting Started</div>
+      <a href="index.html" class="sidebar-link">Overview</a>
+      <a href="authentication.html" class="sidebar-link">Authentication</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Account</div>
+      <a href="#account" class="sidebar-link">Get Account <span class="sidebar-badge badge-get">GET</span></a>
+      <a href="#wallet" class="sidebar-link">Get Wallet <span class="sidebar-badge badge-get">GET</span></a>
+      <a href="#wallet-tx" class="sidebar-link">Wallet Transactions <span class="sidebar-badge badge-get">GET</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Services</div>
+      <a href="#data" class="sidebar-link">Data Plans <span class="sidebar-badge badge-get">GET</span></a>
+      <a href="#data-purchase" class="sidebar-link">Buy Data <span class="sidebar-badge badge-post">POST</span></a>
+      <a href="#airtime" class="sidebar-link">Buy Airtime <span class="sidebar-badge badge-post">POST</span></a>
+      <a href="#electricity" class="sidebar-link">Electricity <span class="sidebar-badge badge-post">POST</span></a>
+      <a href="#tv" class="sidebar-link">Cable TV <span class="sidebar-badge badge-post">POST</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Transactions</div>
+      <a href="#transactions" class="sidebar-link">List Transactions <span class="sidebar-badge badge-get">GET</span></a>
+      <a href="#transaction-get" class="sidebar-link">Get Transaction <span class="sidebar-badge badge-get">GET</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">API Keys</div>
+      <a href="#keys" class="sidebar-link">List Keys <span class="sidebar-badge badge-get">GET</span></a>
+      <a href="#keys-create" class="sidebar-link">Create Key <span class="sidebar-badge badge-post">POST</span></a>
+      <a href="#keys-revoke" class="sidebar-link">Revoke Key <span class="sidebar-badge badge-delete">DEL</span></a>
+    </div>
+  </aside>
+
+  <main class="docs-content">
+    <div class="page-header">
+      <div class="page-tag">API Reference</div>
+      <h1>API Reference</h1>
+      <p class="lead">Complete reference for all Betavend API endpoints. All requests require a Bearer token. Base URL: <code class="inline">https://api.betavend.com</code></p>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <p>Include <code class="inline">X-Idempotency-Key: unique-id</code> on all POST requests to safely retry on network failures without risk of duplicate transactions.</p>
+    </div>
+
+    <!-- ACCOUNT -->
+    <h2 id="account">Account</h2>
+
+    <div class="endpoint-card open">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/account</span>
+        <span class="endpoint-desc">Get account details</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns the authenticated user's account information including tier, KYC level, and registration details.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><span class="code-lang">curl</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl https://api.betavend.com/v1/account \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "Shuaib Akanbi",
+    "email": "you@example.com",
+    "phone": "+2347012345678",
+    "tier": "pro",
+    "kyc_level": 2,
+    "created_at": "2026-01-01T00:00:00.000000Z"
+  },
+  "request_id": "2d37ae02-a43d-4e85-8e59-8cbf3c2e49e5"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- WALLET -->
+    <h2 id="wallet">Wallet</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/wallet</span>
+        <span class="endpoint-desc">Get wallet balance</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns the current wallet balance and bonus balance. All amounts are in Nigerian Naira (NGN).</p>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><span class="code-lang">curl</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl https://api.betavend.com/v1/wallet \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "balance": 5000.00,
+    "bonus_balance": 0.00,
+    "currency": "NGN"
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-card" id="wallet-tx">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/wallet/transactions</span>
+        <span class="endpoint-desc">Wallet transaction history</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns paginated wallet credits and debits including funding, purchases, and reversals.</p>
+        <h3>Query Parameters</h3>
+        <table class="param-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>per_page<span class="param-optional">optional</span></td><td>integer</td><td>Results per page. Default: 20. Max: 100.</td></tr>
+            <tr><td>page<span class="param-optional">optional</span></td><td>integer</td><td>Page number. Default: 1.</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl "https://api.betavend.com/v1/wallet/transactions?per_page=20&page=1" \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA -->
+    <h2 id="data">Data Plans</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/services/data/plans</span>
+        <span class="endpoint-desc">List available data plans</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns all enabled data plans. Filter by network to get plans for a specific carrier.</p>
+        <h3>Query Parameters</h3>
+        <table class="param-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>network<span class="param-optional">optional</span></td><td>string</td><td><code class="inline">mtn</code> · <code class="inline">airtel</code> · <code class="inline">glo</code> · <code class="inline">9mobile</code></td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl "https://api.betavend.com/v1/services/data/plans?network=mtn" \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "plans": [
+      {
+        "plan_id": "mtn-1gb-30days",
+        "name": "1GB — 30 Days",
+        "network": "mtn",
+        "amount": 550,
+        "validity": "30 Days"
+      }
+    ]
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-card" id="data-purchase">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/services/data/purchase</span>
+        <span class="endpoint-desc">Purchase a data bundle</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Purchase a data bundle for any Nigerian mobile number. Deducts from your wallet balance. Always include an idempotency key.</p>
+        <h3>Request Body</h3>
+        <table class="param-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>network<span class="param-required">required</span></td><td>string</td><td><code class="inline">mtn</code> · <code class="inline">airtel</code> · <code class="inline">glo</code> · <code class="inline">9mobile</code></td></tr>
+            <tr><td>plan_code<span class="param-required">required</span></td><td>string</td><td>Plan ID from <code class="inline">GET /v1/services/data/plans</code></td></tr>
+            <tr><td>phone<span class="param-required">required</span></td><td>string</td><td>Recipient phone number in format <code class="inline">08012345678</code></td></tr>
+            <tr><td>amount<span class="param-required">required</span></td><td>number</td><td>Amount in NGN — must match the plan price</td></tr>
+            <tr><td>pin<span class="param-required">required</span></td><td>string</td><td>Your 5-digit transaction PIN</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><span class="code-lang">curl</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X POST https://api.betavend.com/v1/services/data/purchase \
+  -H "Authorization: Bearer bv_live_your_key" \
+  -H "Content-Type: application/json" \
+  -H "X-Idempotency-Key: unique-request-id-001" \
+  -d '{
+    "network": "mtn",
+    "plan_code": "mtn-1gb-30days",
+    "phone": "08012345678",
+    "amount": 550,
+    "pin": "12345"
+  }'</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>201 Created</span></div>
+          <pre><code>{
+  "success": true,
+  "message": "Data purchased successfully",
+  "data": {
+    "reference": "BV-20260502-XXXX",
+    "status": "delivered",
+    "network": "mtn",
+    "phone": "08012345678",
+    "plan": "1GB — 30 Days",
+    "amount": 550,
+    "wallet_balance_after": 4450.00,
+    "delivered_at": "2026-05-02T14:00:05Z"
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIRTIME -->
+    <h2 id="airtime">Airtime</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/services/airtime</span>
+        <span class="endpoint-desc">Purchase airtime</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Purchase airtime for any Nigerian mobile number. Minimum ₦50, maximum ₦50,000 per transaction.</p>
+        <h3>Request Body</h3>
+        <table class="param-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>network<span class="param-required">required</span></td><td>string</td><td><code class="inline">mtn</code> · <code class="inline">airtel</code> · <code class="inline">glo</code> · <code class="inline">9mobile</code></td></tr>
+            <tr><td>phone<span class="param-required">required</span></td><td>string</td><td>Recipient phone number</td></tr>
+            <tr><td>amount<span class="param-required">required</span></td><td>number</td><td>Amount in NGN. Min: 50. Max: 50000.</td></tr>
+            <tr><td>pin<span class="param-required">required</span></td><td>string</td><td>Your 5-digit transaction PIN</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X POST https://api.betavend.com/v1/services/airtime \
+  -H "Authorization: Bearer bv_live_your_key" \
+  -H "Content-Type: application/json" \
+  -H "X-Idempotency-Key: unique-airtime-001" \
+  -d '{
+    "network": "mtn",
+    "phone": "08012345678",
+    "amount": 500,
+    "pin": "12345"
+  }'</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>201 Created</span></div>
+          <pre><code>{
+  "success": true,
+  "message": "Airtime purchased successfully",
+  "data": {
+    "reference": "BV-20260502-AIRTIME-001",
+    "status": "delivered",
+    "network": "mtn",
+    "phone": "08012345678",
+    "amount": 500,
+    "wallet_balance_after": 4000.00
+  },
+  "request_id": "abc-456"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELECTRICITY -->
+    <h2 id="electricity">Electricity</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/services/electricity</span>
+        <span class="endpoint-desc">Pay electricity bill</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Pay electricity bills for prepaid and postpaid meters across all Nigerian DISCOs. Returns a token for prepaid meters.</p>
+        <h3>Supported DISCOs</h3>
+        <p><code class="inline">EKEDC</code> · <code class="inline">IKEDC</code> · <code class="inline">AEDC</code> · <code class="inline">IBEDC</code> · <code class="inline">PHED</code> · <code class="inline">KAEDCO</code> · <code class="inline">JEDC</code> · <code class="inline">KEDCO</code> · <code class="inline">BEDC</code></p>
+        <h3>Request Body</h3>
+        <table class="param-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>disco<span class="param-required">required</span></td><td>string</td><td>DISCO service ID e.g. <code class="inline">ikeja-electric</code></td></tr>
+            <tr><td>meter_number<span class="param-required">required</span></td><td>string</td><td>11 or 13 digit meter number</td></tr>
+            <tr><td>meter_type<span class="param-required">required</span></td><td>string</td><td><code class="inline">prepaid</code> or <code class="inline">postpaid</code></td></tr>
+            <tr><td>amount<span class="param-required">required</span></td><td>number</td><td>Amount in NGN. Minimum: 500.</td></tr>
+            <tr><td>pin<span class="param-required">required</span></td><td>string</td><td>Your 5-digit transaction PIN</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X POST https://api.betavend.com/v1/services/electricity \
+  -H "Authorization: Bearer bv_live_your_key" \
+  -H "Content-Type: application/json" \
+  -H "X-Idempotency-Key: elec-pay-001" \
+  -d '{
+    "disco": "ikeja-electric",
+    "meter_number": "12345678901",
+    "meter_type": "prepaid",
+    "amount": 5000,
+    "pin": "12345"
+  }'</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>201 Created</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "reference": "BV-20260502-ELEC-001",
+    "status": "delivered",
+    "token": "1234-5678-9012-3456-7890",
+    "units": "45.23 kWh",
+    "meter_number": "12345678901",
+    "amount": 5000
+  },
+  "request_id": "abc-789"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- CABLE TV -->
+    <h2 id="tv">Cable TV</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/services/tv</span>
+        <span class="endpoint-desc">Renew cable TV subscription</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Renew cable TV subscriptions for DSTV, GOtv, and StarTimes.</p>
+        <h3>Request Body</h3>
+        <table class="param-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>provider<span class="param-required">required</span></td><td>string</td><td><code class="inline">dstv</code> · <code class="inline">gotv</code> · <code class="inline">startimes</code></td></tr>
+            <tr><td>smartcard_number<span class="param-required">required</span></td><td>string</td><td>Decoder smartcard / IUC number</td></tr>
+            <tr><td>package_code<span class="param-required">required</span></td><td>string</td><td>Subscription package code</td></tr>
+            <tr><td>amount<span class="param-required">required</span></td><td>number</td><td>Amount in NGN</td></tr>
+            <tr><td>pin<span class="param-required">required</span></td><td>string</td><td>Your 5-digit transaction PIN</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X POST https://api.betavend.com/v1/services/tv \
+  -H "Authorization: Bearer bv_live_your_key" \
+  -H "Content-Type: application/json" \
+  -H "X-Idempotency-Key: tv-pay-001" \
+  -d '{
+    "provider": "dstv",
+    "smartcard_number": "1234567890",
+    "package_code": "DSTV-COMPACT",
+    "amount": 15600,
+    "pin": "12345"
+  }'</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <h2 id="transactions">Transactions</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/transactions</span>
+        <span class="endpoint-desc">List all transactions</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns paginated service order history (airtime, data, electricity, TV). Ordered newest first.</p>
+        <h3>Query Parameters</h3>
+        <table class="param-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>per_page<span class="param-optional">optional</span></td><td>integer</td><td>Default: 20. Max: 100.</td></tr>
+            <tr><td>page<span class="param-optional">optional</span></td><td>integer</td><td>Page number. Default: 1.</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl "https://api.betavend.com/v1/transactions?per_page=20" \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "transactions": [
+      {
+        "reference": "BV-20260502-001",
+        "service_type": "data",
+        "recipient": "08012345678",
+        "amount": 550,
+        "status": "successful",
+        "created_at": "2026-05-02T14:00:00.000000Z"
+      }
+    ],
+    "pagination": {
+      "total": 200,
+      "per_page": 20,
+      "current_page": 1,
+      "last_page": 10
+    }
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-card" id="transaction-get">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/transactions/{reference}</span>
+        <span class="endpoint-desc">Get a single transaction</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns full details for a single transaction by reference number.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl https://api.betavend.com/v1/transactions/BV-20260502-001 \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- API KEYS -->
+    <h2 id="keys">API Keys</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/v1/keys</span>
+        <span class="endpoint-desc">List your API keys</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Returns all active API keys for your account. Secret values are never returned — only the key ID and metadata.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl https://api.betavend.com/v1/keys \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "keys": [
+      {
+        "id": 1,
+        "name": "Production Key",
+        "environment": "live",
+        "last_used_at": "2026-05-02T14:00:00Z",
+        "created_at": "2026-05-01T10:00:00Z"
+      }
+    ]
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-card" id="keys-create">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/v1/keys</span>
+        <span class="endpoint-desc">Create a new API key</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Creates a new API key. The full key value is returned <strong>only in this response</strong> — store it immediately. Maximum 5 active keys per account.</p>
+        <h3>Request Body</h3>
+        <table class="param-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>name<span class="param-required">required</span></td><td>string</td><td>A descriptive name for this key. Max 100 chars.</td></tr>
+            <tr><td>environment<span class="param-optional">optional</span></td><td>string</td><td><code class="inline">live</code> (default) or <code class="inline">test</code></td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X POST https://api.betavend.com/v1/keys \
+  -H "Authorization: Bearer bv_live_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My Production Key", "environment": "live"}'</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>201 Created</span></div>
+          <pre><code>{
+  "success": true,
+  "message": "API key created. Save the key now — it will not be shown again.",
+  "data": {
+    "id": 2,
+    "name": "My Production Key",
+    "api_key": "bv_live_abc123...",
+    "environment": "live",
+    "created_at": "2026-05-02T14:00:00Z"
+  },
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-card" id="keys-revoke">
+      <div class="endpoint-header">
+        <span class="method method-delete">DELETE</span>
+        <span class="endpoint-path">/v1/keys/{id}</span>
+        <span class="endpoint-desc">Revoke an API key</span>
+        <svg class="endpoint-chevron" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="endpoint-body">
+        <p>Permanently revokes an API key. Any requests using the revoked key will immediately return <code class="inline">401 auth.key_not_found</code>. This action cannot be undone.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Request</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>curl -X DELETE https://api.betavend.com/v1/keys/2 \
+  -H "Authorization: Bearer bv_live_your_key"</code></pre>
+        </div>
+        <div class="response-block">
+          <div class="response-header"><span>200 OK</span></div>
+          <pre><code>{
+  "success": true,
+  "message": "API key revoked successfully.",
+  "data": null,
+  "request_id": "abc-123"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="nav.js"></script>
+</body>
+</html>

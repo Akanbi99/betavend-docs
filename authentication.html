@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication — Betavend API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand"><div class="brand-icon">B</div>Betavend<span class="brand-tag">DOCS</span></a>
+  <div class="nav-links">
+    <a href="authentication.html" class="active">Auth</a>
+    <a href="api-reference.html">API Reference</a>
+    <a href="errors.html">Errors</a>
+    <a href="webhooks.html">Webhooks</a>
+    <!-- <a href="pricing.html">Pricing</a> -->
+    <a href="changelog.html">Changelog</a>
+  </div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Getting Started</div>
+      <a href="index.html" class="sidebar-link">Overview</a>
+      <a href="authentication.html" class="sidebar-link active">Authentication</a>
+      <a href="errors.html" class="sidebar-link">Error Handling</a>
+      <a href="webhooks.html" class="sidebar-link">Webhooks</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">On This Page</div>
+      <a href="#overview" class="sidebar-link">Overview</a>
+      <a href="#get-key" class="sidebar-link">Get an API Key</a>
+      <a href="#using-key" class="sidebar-link">Using Your Key</a>
+      <a href="#environments" class="sidebar-link">Environments</a>
+      <a href="#scopes" class="sidebar-link">Key Scopes</a>
+      <a href="#security" class="sidebar-link">Security</a>
+      <a href="#errors" class="sidebar-link">Auth Errors</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">API Reference</div>
+      <a href="api-reference.html" class="sidebar-link">All Endpoints</a>
+    </div>
+  </aside>
+
+  <main class="docs-content">
+    <div class="page-header">
+      <div class="page-tag">Authentication</div>
+      <h1>Authentication</h1>
+      <p class="lead">Betavend uses API keys to authenticate requests. All API calls must include a valid key in the Authorization header.</p>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    <p>Every request to <code class="inline">api.betavend.com</code> must be authenticated using a Bearer token. Your API key identifies your account and determines your rate limits, permissions, and which environment (test or live) the request runs in.</p>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <p>API keys are linked to your Betavend account. You can manage all your keys from <a href="https://business.betavend.com/api-keys">business.betavend.com/api-keys</a> or via the <code class="inline">POST /v1/keys</code> endpoint.</p>
+    </div>
+
+    <h2 id="get-key">Get an API Key</h2>
+    <ol>
+      <li>Create a Betavend account at <a href="https://app.betavend.com/register">app.betavend.com/register</a></li>
+      <li>Complete KYC verification in your profile</li>
+      <li>Visit <a href="https://business.betavend.com/api-keys">business.betavend.com/api-keys</a></li>
+      <li>Click <strong>Create API Key</strong>, give it a name, choose environment</li>
+      <li>Copy the key immediately — it is shown <strong>only once</strong></li>
+    </ol>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">⚠️</span>
+      <p>Your API key is shown only once at creation time. If you lose it, revoke it and create a new one. Betavend staff will never ask for your API key.</p>
+    </div>
+
+    <h2 id="using-key">Using Your Key</h2>
+    <p>Pass your API key in the <code class="inline">Authorization</code> header as a Bearer token:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span>Authorization header format</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>Authorization: Bearer bv_live_your_api_key_here</code></pre>
+    </div>
+
+    <p>Full example request:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span>GET /v1/account</span>
+        <span class="code-lang">curl</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>curl https://api.betavend.com/v1/account \
+  -H "Authorization: Bearer bv_live_abc123..."</code></pre>
+    </div>
+
+    <div class="response-block">
+      <div class="response-header"><span>200 OK</span></div>
+      <pre><code>{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "id": 1,
+    "name": "Shuaib Akanbi",
+    "email": "you@example.com",
+    "phone": "+2347012345678",
+    "tier": "pro",
+    "kyc_level": 2,
+    "created_at": "2026-01-01T00:00:00.000000Z"
+  },
+  "request_id": "2d37ae02-a43d-4e85-8e59-8cbf3c2e49e5"
+}</code></pre>
+    </div>
+
+    <h2 id="environments">Environments</h2>
+    <p>Betavend supports two environments. Use the correct key prefix to target the right environment:</p>
+
+    <table class="param-table">
+      <thead>
+        <tr><th>Environment</th><th>Key Prefix</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Live</td>
+          <td><code class="inline">bv_live_</code></td>
+          <td>Real transactions, real money. Use in production only.</td>
+        </tr>
+        <tr>
+          <td>Test</td>
+          <td><code class="inline">bv_test_</code></td>
+          <td>Sandbox environment. No real money moves. Perfect for development.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🔴</span>
+      <p>Never use live keys in development or testing environments. Transactions made with live keys deduct real funds from your wallet.</p>
+    </div>
+
+    <h2 id="scopes">Key Scopes</h2>
+    <p>Each API key can be scoped to specific permissions. A key with no explicit scopes has access to all endpoints. Scoped keys only have access to the listed operations:</p>
+
+    <table class="param-table">
+      <thead>
+        <tr><th>Scope</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>*</td><td>Full access to all endpoints (default)</td></tr>
+        <tr><td>wallet:read</td><td>Read wallet balance and transaction history</td></tr>
+        <tr><td>services:purchase</td><td>Purchase airtime, data, electricity, TV</td></tr>
+        <tr><td>transactions:read</td><td>Read transaction history</td></tr>
+        <tr><td>keys:manage</td><td>Create and revoke API keys</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="security">Security Best Practices</h2>
+    <ul>
+      <li>Never expose API keys in frontend JavaScript, mobile app source, or public repositories</li>
+      <li>Store keys in environment variables or a secrets manager (AWS Secrets Manager, GCP Secret Manager)</li>
+      <li>Set an IP allowlist on your key if your server has a fixed IP</li>
+      <li>Rotate keys regularly — use the revoke endpoint to invalidate old keys</li>
+      <li>Use test keys during development — never use live keys on a dev machine</li>
+      <li>Create separate keys for separate services or environments</li>
+    </ul>
+
+    <h2 id="errors">Authentication Errors</h2>
+
+    <div class="error-row" style="display:grid;grid-template-columns:200px 70px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);font-size:0.875rem;">
+      <span style="font-weight:700;color:var(--muted2);">Error Code</span>
+      <span style="font-weight:700;color:var(--muted2);">HTTP</span>
+      <span style="font-weight:700;color:var(--muted2);">Meaning</span>
+    </div>
+    <div class="error-row"><span class="error-code">auth.invalid_key</span><span class="error-http">401</span><span class="error-desc">Authorization header is missing or doesn't start with <code class="inline">Bearer bv_</code></span></div>
+    <div class="error-row"><span class="error-code">auth.key_not_found</span><span class="error-http">401</span><span class="error-desc">Key not found in database or has been revoked</span></div>
+    <div class="error-row"><span class="error-code">auth.key_expired</span><span class="error-http">401</span><span class="error-desc">Key has passed its expiry date — generate a new one</span></div>
+    <div class="error-row"><span class="error-code">auth.ip_not_allowed</span><span class="error-http">403</span><span class="error-desc">Request IP is not in the key's IP allowlist</span></div>
+    <div class="error-row"><span class="error-code">rate_limit.exceeded</span><span class="error-http">429</span><span class="error-desc">Too many requests. Wait and retry. See <code class="inline">Retry-After</code> header.</span></div>
+  </main>
+</div>
+
+<script src="nav.js"></script>
+</body>
+</html>

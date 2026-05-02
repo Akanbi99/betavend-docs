@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhooks — Betavend API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand"><div class="brand-icon">B</div>Betavend<span class="brand-tag">DOCS</span></a>
+  <div class="nav-links"><a href="authentication.html">Auth</a><a href="api-reference.html">API Reference</a><a href="errors.html">Errors</a><a href="webhooks.html" class="active">Webhooks</a>
+    <!-- <a href="pricing.html">Pricing</a> -->
+    <a href="changelog.html">Changelog</a></div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Getting Started</div>
+      <a href="index.html" class="sidebar-link">Overview</a>
+      <a href="authentication.html" class="sidebar-link">Authentication</a>
+      <a href="errors.html" class="sidebar-link">Error Handling</a>
+      <a href="webhooks.html" class="sidebar-link active">Webhooks</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">On This Page</div>
+      <a href="#overview" class="sidebar-link">Overview</a>
+      <a href="#events" class="sidebar-link">Event Types</a>
+      <a href="#payload" class="sidebar-link">Payload Format</a>
+      <a href="#signing" class="sidebar-link">Signature Verification</a>
+      <a href="#retries" class="sidebar-link">Retries</a>
+      <a href="#best-practices" class="sidebar-link">Best Practices</a>
+    </div>
+  </aside>
+  <main class="docs-content">
+    <div class="page-header">
+      <div class="page-tag">Webhooks</div>
+      <h1>Webhooks</h1>
+      <p class="lead">Betavend sends real-time HTTP POST notifications to your endpoint when events occur — transaction status changes, wallet credits, and more.</p>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    <p>Instead of polling the API to check transaction status, configure a webhook URL on your server and Betavend will push events to you as they happen. Webhook delivery is guaranteed with automatic retries.</p>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <p>Configure your webhook URL at <a href="https://business.betavend.com/webhooks">business.betavend.com/webhooks</a>. You can register multiple URLs for different event types.</p>
+    </div>
+
+    <h2 id="events">Event Types</h2>
+    <table class="param-table">
+      <thead><tr><th>Event</th><th>When it fires</th></tr></thead>
+      <tbody>
+        <tr><td><code class="inline">transaction.completed</code></td><td>A service purchase was successfully delivered</td></tr>
+        <tr><td><code class="inline">transaction.failed</code></td><td>A transaction failed and wallet was auto-reversed</td></tr>
+        <tr><td><code class="inline">transaction.processing</code></td><td>A transaction is being processed by the provider</td></tr>
+        <tr><td><code class="inline">wallet.credited</code></td><td>Wallet was topped up via bank transfer</td></tr>
+        <tr><td><code class="inline">wallet.debited</code></td><td>Wallet was debited for a purchase</td></tr>
+        <tr><td><code class="inline">wallet.reversed</code></td><td>A failed transaction was reversed back to wallet</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="payload">Payload Format</h2>
+    <p>All webhook events share the same envelope structure:</p>
+    <div class="code-block">
+      <div class="code-header"><span>transaction.completed payload</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>POST https://your-server.com/webhook
+Content-Type: application/json
+X-Betavend-Signature: sha256=abc123...
+X-Betavend-Event: transaction.completed
+
+{
+  "event": "transaction.completed",
+  "id": "evt_abc123",
+  "created_at": "2026-05-02T14:00:05Z",
+  "data": {
+    "reference": "BV-20260502-001",
+    "service_type": "data",
+    "network": "mtn",
+    "recipient": "08012345678",
+    "amount": 550,
+    "status": "delivered",
+    "delivered_at": "2026-05-02T14:00:05Z"
+  }
+}</code></pre>
+    </div>
+
+    <h2 id="signing">Signature Verification</h2>
+    <p>Every webhook includes an <code class="inline">X-Betavend-Signature</code> header. Always verify this before processing:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span>Verify signature — Node.js</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(payload, 'utf8')
+    .digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(expected),
+    Buffer.from(signature)
+  );
+}
+
+// In your Express handler:
+app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['x-betavend-signature'];
+  if (!verifyWebhook(req.body, sig, process.env.BETAVEND_WEBHOOK_SECRET)) {
+    return res.status(400).send('Invalid signature');
+  }
+
+  const event = JSON.parse(req.body);
+  // Process event...
+  res.json({ received: true });
+});</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span>Verify signature — PHP</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>$payload   = file_get_contents('php://input');
+$signature = $_SERVER['HTTP_X_BETAVEND_SIGNATURE'] ?? '';
+$secret    = getenv('BETAVEND_WEBHOOK_SECRET');
+
+$expected = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+
+if (!hash_equals($expected, $signature)) {
+    http_response_code(400);
+    exit('Invalid signature');
+}
+
+$event = json_decode($payload, true);
+// Process $event...</code></pre>
+    </div>
+
+    <h2 id="retries">Retry Policy</h2>
+    <p>If your endpoint returns anything other than a <code class="inline">2xx</code> status, Betavend retries with exponential backoff:</p>
+    <table class="param-table">
+      <thead><tr><th>Attempt</th><th>Delay</th></tr></thead>
+      <tbody>
+        <tr><td>1st retry</td><td>30 seconds</td></tr>
+        <tr><td>2nd retry</td><td>5 minutes</td></tr>
+        <tr><td>3rd retry</td><td>30 minutes</td></tr>
+        <tr><td>4th retry</td><td>2 hours</td></tr>
+        <tr><td>5th retry</td><td>8 hours</td></tr>
+      </tbody>
+    </table>
+    <p>After 5 failed attempts the event is marked as dead. You can manually replay failed events from <a href="https://business.betavend.com/webhooks">business.betavend.com/webhooks</a>.</p>
+
+    <h2 id="best-practices">Best Practices</h2>
+    <ul>
+      <li><strong>Respond quickly</strong> — return <code class="inline">200 OK</code> immediately. Do heavy processing asynchronously.</li>
+      <li><strong>Be idempotent</strong> — webhooks may be delivered more than once. Use <code class="inline">event.id</code> to deduplicate.</li>
+      <li><strong>Always verify the signature</strong> — never process unsigned payloads.</li>
+      <li><strong>Check event type</strong> — always read the <code class="inline">event</code> field before processing. New event types may be added.</li>
+      <li><strong>Use HTTPS only</strong> — Betavend will not deliver webhooks to HTTP endpoints.</li>
+    </ul>
+  </main>
+</div>
+<script src="nav.js"></script>
+</body>
+</html>

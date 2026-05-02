@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog — Betavend API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand"><div class="brand-icon">B</div>Betavend<span class="brand-tag">DOCS</span></a>
+  <div class="nav-links"><a href="authentication.html">Auth</a><a href="api-reference.html">API Reference</a><a href="errors.html">Errors</a><a href="webhooks.html">Webhooks</a>
+    <!-- <a href="pricing.html">Pricing</a> -->
+    <a href="changelog.html" class="active">Changelog</a></div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Getting Started</div>
+      <a href="index.html" class="sidebar-link">Overview</a>
+      <a href="authentication.html" class="sidebar-link">Authentication</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Versions</div>
+      <a href="#v1-0-0" class="sidebar-link">v1.0.0 — May 2026 <span class="sidebar-badge badge-new">Latest</span></a>
+    </div>
+  </aside>
+  <main class="docs-content">
+    <div class="page-header">
+      <div class="page-tag">Changelog</div>
+      <h1>Changelog</h1>
+      <p class="lead">All notable changes to the Betavend API are documented here. Breaking changes are clearly marked.</p>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">📬</span>
+      <p>Subscribe to API change notifications by emailing <a href="mailto:support@betavend.com">support@betavend.com</a> with subject "Subscribe to API changelog".</p>
+    </div>
+
+    <div class="changelog-entry" id="v1-0-0">
+      <div class="changelog-version">v1.0.0</div>
+      <div class="changelog-date">May 2, 2026 — Initial Release</div>
+
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/account</code> — returns authenticated user details</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/wallet</code> — returns wallet balance in NGN</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/wallet/transactions</code> — paginated wallet transaction history</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/services/data/plans</code> — list available data plans per network</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">POST /v1/services/data/purchase</code> — purchase data bundle</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">POST /v1/services/airtime</code> — purchase airtime</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">POST /v1/services/electricity</code> — pay electricity bill</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">POST /v1/services/tv</code> — renew cable TV subscription</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/transactions</code> — list all service transactions</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/transactions/{ref}</code> — get single transaction by reference</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">GET /v1/keys</code> — list API keys</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">POST /v1/keys</code> — create new API key (max 5 per account)</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">DELETE /v1/keys/{id}</code> — revoke API key</p>
+      <p><span class="changelog-badge badge-added">Added</span> Bearer token authentication via <code class="inline">bv_live_*</code> and <code class="inline">bv_test_*</code> key prefixes</p>
+      <p><span class="changelog-badge badge-added">Added</span> Idempotency key support via <code class="inline">X-Idempotency-Key</code> header on all POST requests</p>
+      <p><span class="changelog-badge badge-added">Added</span> <code class="inline">request_id</code> on every response for distributed tracing</p>
+      <p><span class="changelog-badge badge-added">Added</span> Rate limiting: 60 requests/minute per API key</p>
+      <p><span class="changelog-badge badge-added">Added</span> CORS support for <code class="inline">app.betavend.com</code>, <code class="inline">business.betavend.com</code>, <code class="inline">docs.betavend.com</code></p>
+      <p><span class="changelog-badge badge-added">Added</span> Stable error codes (e.g. <code class="inline">wallet.insufficient_funds</code>) — codes are permanent, messages may evolve</p>
+      <p><span class="changelog-badge badge-added">Added</span> Auto-reversal: failed transactions automatically refund wallet within 5 minutes</p>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">📋</span>
+      <p>This is the initial public API release. All endpoints are considered stable. We follow semantic versioning — breaking changes will increment the major version and be announced 30 days in advance.</p>
+    </div>
+  </main>
+</div>
+<script src="nav.js"></script>
+</body>
+</html>

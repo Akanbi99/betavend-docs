@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Betavend API Documentation</title>
+  <meta name="description" content="Complete API documentation for Betavend — airtime, data, electricity and cable TV payments API for Nigeria.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .home-sidebar { position: fixed; top: var(--nav-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--nav-h)); overflow-y: auto; border-right: 1px solid var(--border); padding: 24px 16px; background: var(--bg2); }
+    .quickstart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin: 0 64px 40px; max-width: 836px; margin-left: calc(var(--sidebar-w) + 64px); }
+    @media(max-width:900px){ .quickstart-box { margin: 0 20px 40px; } .home-sidebar { display: none; } }
+    .quickstart-box h2 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); border: none; padding: 0; margin-top: 0; }
+    .steps { list-style: none; margin: 0; counter-reset: steps; }
+    .steps li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; font-size: 0.9rem; color: #94a3b8; }
+    .steps li::before { content: counter(steps); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--primary-l); border: 1px solid rgba(24,119,242,0.3); border-radius: 50%; font-size: 0.72rem; font-weight: 700; color: #93c5fd; flex-shrink: 0; margin-top: 1px; }
+    .base-url-bar { display: flex; align-items: center; gap: 12px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 9px; padding: 10px 16px; margin: 0 64px 60px; max-width: 836px; margin-left: calc(var(--sidebar-w) + 64px); }
+    @media(max-width:900px){ .base-url-bar { margin: 0 20px 40px; } }
+    .base-url-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; }
+    .base-url-value { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: #93c5fd; flex: 1; }
+    .base-url-copy { background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .base-url-copy:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand">
+    <div class="brand-icon">B</div>
+    Betavend
+    <span class="brand-tag">DOCS</span>
+  </a>
+  <div class="nav-links">
+    <a href="authentication.html">Auth</a>
+    <a href="api-reference.html">API Reference</a>
+    <a href="errors.html">Errors</a>
+    <a href="webhooks.html">Webhooks</a>
+    <!-- <a href="pricing.html">Pricing</a> -->
+    <a href="changelog.html">Changelog</a>
+  </div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="home-sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Getting Started</div>
+    <a href="index.html" class="sidebar-link active">Overview</a>
+    <a href="authentication.html" class="sidebar-link">Authentication</a>
+    <a href="errors.html" class="sidebar-link">Error Handling</a>
+    <a href="webhooks.html" class="sidebar-link">Webhooks</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">API Reference</div>
+    <a href="api-reference.html#account" class="sidebar-link">Account <span class="sidebar-badge badge-get">GET</span></a>
+    <a href="api-reference.html#wallet" class="sidebar-link">Wallet <span class="sidebar-badge badge-get">GET</span></a>
+    <a href="api-reference.html#data" class="sidebar-link">Data Plans <span class="sidebar-badge badge-get">GET</span></a>
+    <a href="api-reference.html#data-purchase" class="sidebar-link">Buy Data <span class="sidebar-badge badge-post">POST</span></a>
+    <a href="api-reference.html#airtime" class="sidebar-link">Airtime <span class="sidebar-badge badge-post">POST</span></a>
+    <a href="api-reference.html#electricity" class="sidebar-link">Electricity <span class="sidebar-badge badge-post">POST</span></a>
+    <a href="api-reference.html#tv" class="sidebar-link">Cable TV <span class="sidebar-badge badge-post">POST</span></a>
+    <a href="api-reference.html#transactions" class="sidebar-link">Transactions <span class="sidebar-badge badge-get">GET</span></a>
+    <a href="api-reference.html#keys" class="sidebar-link">API Keys</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">More</div>
+    <!-- <a href="pricing.html" class="sidebar-link">Pricing</a> -->
+    <a href="changelog.html" class="sidebar-link">Changelog <span class="sidebar-badge badge-new">New</span></a>
+  </div>
+</aside>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="page-tag">REST API · v1.0 · Nigeria</div>
+  <h1>Betavend<br>API Docs</h1>
+  <p class="lead" style="max-width:520px;">
+    Programmatic access to airtime, data, electricity and cable TV payments across Nigeria.
+    Simple REST. Bearer token auth. JSON in, JSON out.
+  </p>
+  <div class="hero-actions">
+    <a href="api-reference.html" class="btn-primary">Explore API Reference →</a>
+    <a href="authentication.html" class="btn-secondary">Quick Start</a>
+  </div>
+</section>
+
+<!-- BASE URL -->
+<div class="base-url-bar">
+  <span class="base-url-label">Base URL</span>
+  <span class="base-url-value">https://api.betavend.com/v1</span>
+  <button class="base-url-copy" onclick="copyBaseUrl(this)">Copy</button>
+</div>
+
+<!-- FEATURES -->
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-icon">⚡</div>
+    <h3>Instant delivery</h3>
+    <p>Airtime and data delivered within 5 seconds. Auto-reversal if delivery fails — wallet is always refunded.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🔑</div>
+    <h3>Bearer token auth</h3>
+    <p>API keys scoped to test or live environments. Per-key IP allowlists and rate limits.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🔁</div>
+    <h3>Idempotent requests</h3>
+    <p>Use <code class="inline">X-Idempotency-Key</code> header on all POST requests. Safe to retry on network errors.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📡</div>
+    <h3>Webhooks</h3>
+    <p>Real-time event delivery for transaction status changes. HMAC-signed payloads. Automatic retry.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🇳🇬</div>
+    <h3>All Nigerian networks</h3>
+    <p>MTN, Airtel, Glo, 9Mobile. All DISCOs. DSTV, GOtv, StarTimes. Built for Nigerian infrastructure.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🆔</div>
+    <h3>Request tracing</h3>
+    <p>Every response includes a <code class="inline">request_id</code>. Include it in support tickets for instant lookup.</p>
+  </div>
+</div>
+
+<!-- ENDPOINT OVERVIEW -->
+<div class="endpoint-overview">
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:20px;">Endpoints at a glance</h2>
+
+  <div style="margin-bottom:24px;">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted2);margin-bottom:10px;">Account & Wallet</div>
+    <a href="api-reference.html#account" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/account</span><span class="endpoint-row-desc">Get account details</span></a>
+    <a href="api-reference.html#wallet" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/wallet</span><span class="endpoint-row-desc">Get wallet balance</span></a>
+    <a href="api-reference.html#wallet-tx" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/wallet/transactions</span><span class="endpoint-row-desc">Wallet transaction history</span></a>
+  </div>
+
+  <div style="margin-bottom:24px;">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted2);margin-bottom:10px;">Services</div>
+    <a href="api-reference.html#data" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/services/data/plans</span><span class="endpoint-row-desc">List available data plans</span></a>
+    <a href="api-reference.html#data-purchase" class="endpoint-row"><span class="method method-post">POST</span><span class="endpoint-row-path">/v1/services/data/purchase</span><span class="endpoint-row-desc">Purchase a data bundle</span></a>
+    <a href="api-reference.html#airtime" class="endpoint-row"><span class="method method-post">POST</span><span class="endpoint-row-path">/v1/services/airtime</span><span class="endpoint-row-desc">Purchase airtime</span></a>
+    <a href="api-reference.html#electricity" class="endpoint-row"><span class="method method-post">POST</span><span class="endpoint-row-path">/v1/services/electricity</span><span class="endpoint-row-desc">Pay electricity bill</span></a>
+    <a href="api-reference.html#tv" class="endpoint-row"><span class="method method-post">POST</span><span class="endpoint-row-path">/v1/services/tv</span><span class="endpoint-row-desc">Renew cable TV subscription</span></a>
+  </div>
+
+  <div style="margin-bottom:24px;">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted2);margin-bottom:10px;">Transactions</div>
+    <a href="api-reference.html#transactions" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/transactions</span><span class="endpoint-row-desc">List all transactions</span></a>
+    <a href="api-reference.html#transaction-get" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/transactions/{reference}</span><span class="endpoint-row-desc">Get a single transaction</span></a>
+  </div>
+
+  <div>
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted2);margin-bottom:10px;">API Keys</div>
+    <a href="api-reference.html#keys" class="endpoint-row"><span class="method method-get">GET</span><span class="endpoint-row-path">/v1/keys</span><span class="endpoint-row-desc">List your API keys</span></a>
+    <a href="api-reference.html#keys-create" class="endpoint-row"><span class="method method-post">POST</span><span class="endpoint-row-path">/v1/keys</span><span class="endpoint-row-desc">Create a new API key</span></a>
+    <a href="api-reference.html#keys-revoke" class="endpoint-row"><span class="method method-delete">DELETE</span><span class="endpoint-row-path">/v1/keys/{id}</span><span class="endpoint-row-desc">Revoke an API key</span></a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="docs-footer">
+  <div class="footer-links">
+    <a href="https://betavend.com">betavend.com</a>
+    <a href="https://app.betavend.com">App</a>
+    <a href="https://business.betavend.com">Business</a>
+    <a href="mailto:support@betavend.com">support@betavend.com</a>
+  </div>
+  <p>© 2026 Betavend · API v1.0</p>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+function copyBaseUrl(btn) {
+  navigator.clipboard.writeText('https://api.betavend.com/v1');
+  btn.textContent = 'Copied ✓';
+  setTimeout(() => btn.textContent = 'Copy', 2000);
+}
+</script>
+</body>
+</html>

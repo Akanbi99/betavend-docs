@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — Betavend API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin: 24px 0; }
+    .calc-box h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 16px; }
+    .calc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .calc-row label { font-size: 0.85rem; color: var(--muted); width: 160px; flex-shrink: 0; }
+    .calc-row input, .calc-row select { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; }
+    .calc-row input:focus, .calc-row select:focus { border-color: rgba(24,119,242,0.4); }
+    .calc-result { background: var(--primary-l); border: 1px solid rgba(24,119,242,0.2); border-radius: 10px; padding: 16px; margin-top: 16px; }
+    .calc-result-label { font-size: 0.75rem; color: #93c5fd; margin-bottom: 4px; }
+    .calc-result-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+  </style>
+</head>
+<body>
+<nav class="docs-nav">
+  <a href="index.html" class="nav-brand"><div class="brand-icon">B</div>Betavend<span class="brand-tag">DOCS</span></a>
+  <div class="nav-links"><a href="authentication.html">Auth</a><a href="api-reference.html">API Reference</a><a href="errors.html">Errors</a><a href="webhooks.html">Webhooks</a><a href="pricing.html" class="active">Pricing</a><a href="changelog.html">Changelog</a></div>
+  <span class="nav-version">v1.0</span>
+  <a href="https://business.betavend.com" class="nav-cta" target="_blank">Get API Key →</a>
+</nav>
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Getting Started</div>
+      <a href="index.html" class="sidebar-link">Overview</a>
+      <a href="authentication.html" class="sidebar-link">Authentication</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">On This Page</div>
+      <a href="#plans" class="sidebar-link">API Plans</a>
+      <a href="#per-transaction" class="sidebar-link">Per-Transaction Fees</a>
+      <a href="#calculator" class="sidebar-link">Cost Calculator</a>
+      <a href="#billing" class="sidebar-link">Billing</a>
+    </div>
+  </aside>
+  <main class="docs-content">
+    <div class="page-header">
+      <div class="page-tag">Pricing</div>
+      <h1>Pricing</h1>
+      <p class="lead">Start free. Pay as you grow. No hidden fees. Pricing has two layers: your plan tier (monthly access) and per-transaction fees (what you pay per API call).</p>
+    </div>
+
+    <h2 id="plans">API Plans</h2>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan" style="color:var(--muted);">Starter</div>
+        <div class="pricing-price">Free<span> / month</span></div>
+        <div class="pricing-desc">For individuals and testing</div>
+        <ul class="pricing-features">
+          <li>5,000 API calls / month</li>
+          <li>60 requests / minute</li>
+          <li>Bulk jobs: 1,000 rows</li>
+          <li>2 webhook endpoints</li>
+          <li>3 team members</li>
+          <li>Sandbox included</li>
+          <li>Email support (48h)</li>
+          <li>30-day audit log</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-plan" style="color:#93c5fd;">Growth</div>
+        <div class="pricing-price">₦25,000<span> / month</span></div>
+        <div class="pricing-desc">For growing businesses</div>
+        <ul class="pricing-features">
+          <li>50,000 API calls / month</li>
+          <li>300 requests / minute</li>
+          <li>Bulk jobs: 10,000 rows</li>
+          <li>3 concurrent bulk jobs</li>
+          <li>10 webhook endpoints</li>
+          <li>10 team members</li>
+          <li>Approval workflows</li>
+          <li>Email support (24h)</li>
+          <li>90-day audit log</li>
+          <li>99.5% uptime SLA</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-plan" style="color:#fbbf24;">Scale</div>
+        <div class="pricing-price">₦150,000<span> / month</span></div>
+        <div class="pricing-desc">For high-volume platforms</div>
+        <ul class="pricing-features">
+          <li>500,000 API calls / month</li>
+          <li>1,200 requests / minute</li>
+          <li>Bulk jobs: 100,000 rows</li>
+          <li>10 concurrent bulk jobs</li>
+          <li>50 webhook endpoints</li>
+          <li>50 team members</li>
+          <li>Sub-wallets</li>
+          <li>Priority + Slack support</li>
+          <li>1-year audit log</li>
+          <li>99.9% uptime SLA</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-plan" style="color:#c4b5fd;">Enterprise</div>
+        <div class="pricing-price">Custom</div>
+        <div class="pricing-desc">For large organisations</div>
+        <ul class="pricing-features">
+          <li>Unlimited API calls</li>
+          <li>Custom rate limits</li>
+          <li>Unlimited bulk rows</li>
+          <li>Unlimited webhooks</li>
+          <li>Unlimited team members</li>
+          <li>SSO / SAML</li>
+          <li>Dedicated CSM</li>
+          <li>7-year audit log</li>
+          <li>99.95% uptime SLA + credits</li>
+          <li>Custom contracts / NDA</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 id="per-transaction">Per-Transaction Fees</h2>
+    <p>These fees apply on top of your plan and depend on the service type:</p>
+    <table class="param-table">
+      <thead><tr><th>Transaction Type</th><th>Fee</th></tr></thead>
+      <tbody>
+        <tr><td>Wallet top-up via bank transfer</td><td>1.6% of transfer amount</td></tr>
+        <tr><td>Data bundle purchase</td><td>Service margin (included in plan price)</td></tr>
+        <tr><td>Airtime purchase</td><td>Service margin (included in plan price)</td></tr>
+        <tr><td>Electricity payment</td><td>Service margin (included in plan price)</td></tr>
+        <tr><td>Cable TV renewal</td><td>Service margin (included in plan price)</td></tr>
+        <tr><td>Webhook delivery</td><td>Free</td></tr>
+        <tr><td>API call overage</td><td>Starter: ₦5/call · Growth: ₦3/call · Scale: ₦1.50/call</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="calculator">Cost Calculator</h2>
+    <div class="calc-box">
+      <h3>Estimate your monthly API cost</h3>
+      <div class="calc-row">
+        <label>API calls / month</label>
+        <input type="number" id="calc-calls" value="10000" min="0" oninput="calculate()">
+      </div>
+      <div class="calc-row">
+        <label>Plan</label>
+        <select id="calc-plan" onchange="calculate()">
+          <option value="starter">Starter (Free)</option>
+          <option value="growth" selected>Growth (₦25,000)</option>
+          <option value="scale">Scale (₦150,000)</option>
+        </select>
+      </div>
+      <div class="calc-result">
+        <div class="calc-result-label">Estimated monthly cost</div>
+        <div class="calc-result-value" id="calc-output">₦25,000</div>
+        <div style="font-size:0.78rem;color:#93c5fd;margin-top:6px;" id="calc-note">50,000 calls included. No overage.</div>
+      </div>
+    </div>
+
+    <h2 id="billing">Billing</h2>
+    <ul>
+      <li><strong>Plan fee</strong> is charged monthly in advance to your Betavend wallet</li>
+      <li><strong>Overages</strong> are deducted from your wallet in real time as they occur</li>
+      <li>At 80% of your plan limit you receive an email warning</li>
+      <li>At 100% usage, requests are throttled until the next billing cycle or you upgrade</li>
+      <li>Invoices are auto-generated and downloadable from <a href="https://business.betavend.com/billing">business.betavend.com/billing</a></li>
+    </ul>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <p>Questions about pricing or need a custom Enterprise quote? Email <a href="mailto:support@betavend.com">support@betavend.com</a></p>
+    </div>
+  </main>
+</div>
+<script src="nav.js"></script>
+<script>
+const plans = {
+  starter: { base: 0,       included: 5000,   overage: 5   },
+  growth:  { base: 25000,   included: 50000,  overage: 3   },
+  scale:   { base: 150000,  included: 500000, overage: 1.5 },
+};
+
+function calculate() {
+  const calls = parseInt(document.getElementById('calc-calls').value) || 0;
+  const plan  = plans[document.getElementById('calc-plan').value];
+  const extra = Math.max(0, calls - plan.included);
+  const total = plan.base + (extra * plan.overage);
+
+  document.getElementById('calc-output').textContent = '₦' + total.toLocaleString();
+  document.getElementById('calc-note').textContent   = extra > 0
+    ? `${plan.included.toLocaleString()} included + ${extra.toLocaleString()} overage × ₦${plan.overage}`
+    : `${plan.included.toLocaleString()} calls included. No overage.`;
+}
+</script>
+</body>
+</html>
